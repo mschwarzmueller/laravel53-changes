@@ -12,8 +12,12 @@
 */
 
 Route::get('/', function () {
-    $projects = ["ReactJS + Redux", "Laravel 5.3 - What's New",
-        ["Project Structure", "\$loop", "Auth Changes", "Mailables", "Passport", "Pagination Improvements", "Elixir with Webpack"],
-        "...and more"];
-    return view('welcome', ['projects' => $projects]);
+    return view('welcome');
 });
+
+Route::post('/sendmail', function (\Illuminate\Http\Request $request, \Illuminate\Mail\Mailer $mailer) {
+    $mailer
+        ->to($request->input('mail'))
+        ->send(new \App\Mail\MyMail($request->input('title')));
+    return redirect()->back();
+})->name('sendmail');
